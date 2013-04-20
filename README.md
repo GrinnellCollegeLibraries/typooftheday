@@ -28,5 +28,4 @@ One recommendation from III is to use the EXPLAIN command to determine the syste
 - edit python record to fix misspellings in the following fields
 -- 246
 -- 505 $t
--- 520 $t
 - create option to create a results file without having it go through python script, in case misspelling is more complex than "search and replace"
