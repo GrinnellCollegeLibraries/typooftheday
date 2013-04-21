@@ -23,14 +23,13 @@
 			$sel_searchType = $_POST['searchType'];
 			
 			if ($sel_searchType == 'full') {
-				$query = "SELECT record_id FROM sierra_view.phrase_entry WHERE index_tag='t' AND varfield_type_code='t' AND type3='' AND index_entry ~* '(^|\s)$sel_wrongWord\s' AND index_entry !~* '(^|\s)$sel_wrongWord\ssic\s'";
+				$results = pg_query_params($conn, "SELECT record_id FROM sierra_view.phrase_entry WHERE index_tag='t' AND varfield_type_code='t' AND type3='' AND index_entry ~* $1 AND index_entry !~* $2", array('(^|\s)'.$sel_wrongWord.'\s', '(^|\s)'.$sel_wrongWord.'\ssic\s'));
 				} elseif ($sel_searchType == 'partial') {
-				$query = "SELECT record_id FROM sierra_view.phrase_entry WHERE index_tag='t' AND varfield_type_code='t' AND type3='' AND index_entry ~* '(^|\s)$sel_wrongWord\[\w]*' AND index_entry !~* '(^|\s)$sel_wrongWord\[\w]*\ssic\s'";
+				$results = pg_query_params($conn, "SELECT record_id FROM sierra_view.phrase_entry WHERE index_tag='t' AND varfield_type_code='t' AND type3='' AND index_entry ~* $1 AND index_entry !~* $2", array('(^|\s)'.$sel_wrongWord.'[\w]*', '(^|\s)'.$sel_wrongWord.'[\w]*\ssic\s'));
 				} else {
 				exit('<a href="index.php">Please choose a search type.</a>');
 			}
-			
-			$results = pg_query($conn, $query);	
+
 			if (!$results) {
 				die("Error in SQL query: " . pg_last_error());
 			}
@@ -98,7 +97,7 @@
 				<input type="submit" name="submit">
 			</form>		
 			
-		<p>Looking for some examples? Try <em>fom</em> for "from" (full search) or <em>preperat</em> for "perparat" (partial search).</p>
+		<p>Looking for some examples? Try <em>fom</em> for "from" (full search) or <em>preperat</em> for "preparat" (partial search).</p>
 
 			
 	</body>
